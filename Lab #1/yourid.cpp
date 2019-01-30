@@ -5,6 +5,15 @@ using namespace std;
 //funciton to executre insertion sort algorithm. Takes in array and array size as parameters.
 void InsertionSort(int arr[], int arrSize){
 
+	if (arrSize < 1){
+		cout << ";";
+		return;
+	}
+
+	if (arrSize == 1){
+		cout << arr[0] << ";";
+	}
+
 	//initialize an int variable to store current key to compare with array elements
 	int key;
 
