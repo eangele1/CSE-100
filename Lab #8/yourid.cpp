@@ -2,34 +2,54 @@
 
 using namespace std;
 
-void Print_Optimal_Parentheses(int* s, int i, int j, int n){
+void Print_Optimal_Parentheses(int* s, int& i, int& j, int& n){
+	
 	if(i == j){
 		cout << "A" << i - 1;
-		return;
 	}
 	else{
 		cout << "(";
-		Print_Optimal_Parentheses(s, i, *((s + i * n) + j), n);
-		Print_Optimal_Parentheses(s, *((s + i * n) + j) + 1, j, n);
+		
+		int temp = j;
+		j = *((s + i * n) + j);
+		
+		Print_Optimal_Parentheses(s, i, j, n);
+		j = temp;
+		
+		temp = i;
+		i = *((s + i * n) + j) + 1;
+		Print_Optimal_Parentheses(s, i, j, n);
+		
 		cout << ")";
 	}
 }
 
-void Matrix_Chain_Order(int p[], int n){
+void Matrix_Chain_Order(int p[], int& n){
 	int m[n][n], s[n][n];
 	
-	for(int i = 1; i < n; i++){
+	int i, l, k;
+	
+	i = 1;
+	
+	while(i < n){
 		m[i][i] = 0;
+		i++;
 	}
 	
-	for(int l = 2; l < n; l++){
+	l = 2;
+	
+	while (l < n) {
 		
-		for(int i = 1; i < n - l + 1; i++){
+		i = 1;
+		
+		while(i < n - l + 1){
 			
 			int j = l + i - 1;
 			m[i][j] = 2147483647;
 			
-			for(int k = i; k < j; k++){
+			k = i;
+			
+			while(k < j){
 				
 				int q = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j];
 				
@@ -37,12 +57,19 @@ void Matrix_Chain_Order(int p[], int n){
 					m[i][j] = q;
 					s[i][j] = k;
 				}
+				k++;
 			}
+			i++;
 		}
+		l++;
 	}
 	cout << m[1][n - 1];
 	cout << "\n";
-	Print_Optimal_Parentheses((int*)s, 1, n - 1, n);
+	
+	i = 1;
+	int j = n - 1;
+	
+	Print_Optimal_Parentheses((int*)s, i, j, n);
 	cout << "\n";
 }
 
@@ -51,13 +78,18 @@ int main(){
 	int arrSize;
 	cin >> arrSize;
 	
-	int p[arrSize + 1];
+	arrSize = arrSize + 1;
 	
-	for(int i = 0; i < arrSize + 1; i++){
+	int p[arrSize];
+	
+	int i = 0;
+	
+	while (i != arrSize) {
 		cin >> p[i];
+		i++;
 	}
 	
-	Matrix_Chain_Order(p, arrSize + 1);
+	Matrix_Chain_Order(p, arrSize);
 	
 	return 0;
 }
